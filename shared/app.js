@@ -5,10 +5,9 @@
   const defaultSettings = {
     style: "cozy",
     openDescriptions: false,
-    starredFirst: true,
     compact: false,
     docTextUrl: "",
-    starred: []
+    order: {}
   };
   let settings = loadSettings();
   let parsedSections = [];
@@ -134,39 +133,82 @@
       .join("");
   }
 
+  function orderedItems(section) {
+    const savedOrder = Array.isArray(settings.order?.[section.id]) ? settings.order[section.id] : [];
+    const byId = new Map(section.items.map((item) => [item.id, item]));
+    const ordered = savedOrder.map((id) => byId.get(id)).filter(Boolean);
+    const remaining = section.items.filter((item) => !savedOrder.includes(item.id));
+    return [...ordered, ...remaining];
+  }
+
+  function saveOrder(sectionId, items) {
+    settings.order = settings.order || {};
+    settings.order[sectionId] = items.map((item) => item.id);
+    saveSettings();
+  }
+
+  function moveItem(sectionId, itemId, direction) {
+    const section = parsedSections.find((candidate) => candidate.id === sectionId);
+    if (!section) return;
+    const items = orderedItems(section);
+    const index = items.findIndex((item) => item.id === itemId);
+    if (index < 0) return;
+    const nextIndex = direction === "up" ? index - 1 : index + 1;
+    if (nextIndex < 0 || nextIndex >= items.length) return;
+    const [item] = items.splice(index, 1);
+    items.splice(nextIndex, 0, item);
+    saveOrder(sectionId, items);
+    renderSections(parsedSections);
+  }
+
+  function photoBreak(index) {
+    const root = document.body.dataset.assetRoot || "../assets";
+    const imageSets = [
+      ["family-2.jpg", "family-3.jpg", "family-4.jpg"],
+      ["family-5.jpg", "family-6.jpg", "family-2.jpg"],
+      ["family-3.jpg", "family-4.jpg", "family-5.jpg"],
+      ["family-6.jpg", "family-2.jpg", "family-3.jpg"]
+    ];
+    const images = imageSets[index % imageSets.length];
+    return `<div class="photo-break" aria-hidden="true">
+      ${images.map((name) => `<img src="${root}/${name}" alt="">`).join("")}
+    </div>`;
+  }
+
   function renderSections(sections) {
     const host = document.querySelector("[data-sections]");
     if (!host) return;
-    const starred = new Set(settings.starred || []);
     host.innerHTML = sections
       .map((section, index) => {
-        const items = [...section.items];
-        if (settings.starredFirst) {
-          items.sort((a, b) => Number(starred.has(b.id)) - Number(starred.has(a.id)));
-        }
+        const items = orderedItems(section);
         const itemHtml = items
-          .map((item) => {
-            const isStarred = starred.has(item.id);
+          .map((item, itemIndex) => {
             const open = settings.openDescriptions && item.description;
-            return `<article class="help-card ${isStarred ? "is-starred" : ""}" data-item-id="${item.id}">
-              <button type="button" class="star-button" data-star="${item.id}" aria-label="${isStarred ? "Unstar" : "Star"} ${escapeHtml(item.title)}" aria-pressed="${isStarred}">${isStarred ? "★" : "☆"}</button>
+            return `<article class="help-card" data-section-id="${section.id}" data-item-id="${item.id}">
+              <button type="button" class="move-handle" data-move-handle aria-label="Move ${escapeHtml(item.title)}" aria-expanded="false">
+                <span></span><span></span><span></span>
+              </button>
               <button type="button" class="card-main" data-toggle-card aria-expanded="${open ? "true" : "false"}">
                 <span class="item-title">${escapeHtml(item.title)}</span>
-                <span class="expand-mark" aria-hidden="true">+</span>
+                <span class="expand-mark" aria-hidden="true">⌄</span>
               </button>
+              <div class="move-controls" hidden>
+                <button type="button" data-move-item="up" data-section-id="${section.id}" data-item-id="${item.id}" ${itemIndex === 0 ? "disabled" : ""}>Move up</button>
+                <button type="button" data-move-item="down" data-section-id="${section.id}" data-item-id="${item.id}" ${itemIndex === items.length - 1 ? "disabled" : ""}>Move down</button>
+              </div>
               <div class="item-details" ${open ? "" : "hidden"}>
                 <p>${escapeHtml(item.description || "No extra details yet. If this sounds useful, ask Tal or Sophie what would help most.")}</p>
               </div>
             </article>`;
           })
           .join("");
-        return `<section class="help-section" id="${section.id}" style="--section-index:${index}">
+        const sectionHtml = `<section class="help-section" id="${section.id}" style="--section-index:${index}">
           <header>
-            <p class="section-count">${section.items.length} ideas</p>
             <h3>${escapeHtml(section.title)}</h3>
           </header>
           <div class="help-list">${itemHtml}</div>
         </section>`;
+        return `${sectionHtml}${index < sections.length - 1 ? photoBreak(index) : ""}`;
       })
       .join("");
   }
@@ -193,15 +235,27 @@
         return;
       }
 
-      const star = event.target.closest("[data-star]");
-      if (star) {
-        const id = star.dataset.star;
-        const set = new Set(settings.starred || []);
-        if (set.has(id)) set.delete(id);
-        else set.add(id);
-        settings.starred = [...set];
-        saveSettings();
-        renderSections(parsedSections);
+      const moveHandle = event.target.closest("[data-move-handle]");
+      if (moveHandle) {
+        const card = moveHandle.closest(".help-card");
+        const controls = card.querySelector(".move-controls");
+        const expanded = moveHandle.getAttribute("aria-expanded") === "true";
+        document.querySelectorAll(".help-card.is-moving").forEach((openCard) => {
+          if (openCard !== card) {
+            openCard.classList.remove("is-moving");
+            openCard.querySelector("[data-move-handle]")?.setAttribute("aria-expanded", "false");
+            openCard.querySelector(".move-controls")?.setAttribute("hidden", "");
+          }
+        });
+        moveHandle.setAttribute("aria-expanded", String(!expanded));
+        card.classList.toggle("is-moving", !expanded);
+        controls.hidden = expanded;
+        return;
+      }
+
+      const moveButton = event.target.closest("[data-move-item]");
+      if (moveButton) {
+        moveItem(moveButton.dataset.sectionId, moveButton.dataset.itemId, moveButton.dataset.moveItem);
         return;
       }
 

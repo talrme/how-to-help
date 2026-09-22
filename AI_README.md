@@ -6,10 +6,11 @@ This is a static GitHub Pages website for sharing practical ways people can help
 
 ## Architecture
 
-- Root `index.html` is a staging picker.
+- Root `index.html` is the production page based on the simplified Option 2 direction.
 - `staging_1` through `staging_5` are five independent visual directions.
 - Shared functionality lives in `shared/app.js`.
 - Shared baseline styling lives in `shared/base.css`.
+- Production styling lives in root `styles.css`.
 - Each staging folder has its own `styles.css` with the visual treatment.
 - `shared/config.js` contains the Google Doc ID, permanent published URL, published text URL, live site URL, and fallback content snapshot.
 
@@ -30,8 +31,10 @@ Bullets are parsed as help cards. Text before the first ` - ` becomes the card t
 - Keep the site pretty, warm, and mobile-friendly.
 - Use real family imagery when available and easy-to-replace placeholders elsewhere.
 - Avoid big explanatory text blocks before the useful list.
+- Keep the production page direct: title, image, sections, bottom QR/settings.
 - Settings should be local to the device.
-- A QR-code modal should be available near the bottom and in the hero actions.
+- A QR-code modal should be available from the bottom controls.
+- Item reordering is saved locally per device in `localStorage`.
 
 ## Live Doc Caveat
 

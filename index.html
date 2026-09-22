@@ -2,69 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>How to Help - staging</title>
-  <meta name="theme-color" content="#fff8ef">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How to Help</title>
+  <meta name="theme-color" content="#eef8f5">
+  <meta name="apple-mobile-web-app-title" content="How to Help">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="shared/base.css">
-  <style>
-    body { background: #fbf4ea; color: #17233f; }
-    .picker-shell { max-width: 1120px; margin: 0 auto; padding: 44px 22px; }
-    .picker-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: end; }
-    .picker-hero img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; box-shadow: 0 18px 60px rgba(23,35,63,.16); }
-    .picker-hero h1 { font-size: clamp(3rem, 8vw, 7rem); line-height: .86; margin: 0 0 16px; letter-spacing: 0; }
-    .picker-hero p { font-size: 1.1rem; line-height: 1.55; max-width: 56ch; }
-    .option-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-top: 34px; }
-    .option-card { min-height: 210px; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: inherit; border: 1px solid rgba(23,35,63,.13); box-shadow: 0 16px 40px rgba(23,35,63,.08); transition: transform .18s ease, box-shadow .18s ease; }
-    .option-card:hover { transform: translateY(-4px); box-shadow: 0 22px 55px rgba(23,35,63,.14); }
-    .option-card span { text-transform: uppercase; font-size: .72rem; letter-spacing: .16em; font-weight: 800; opacity: .7; }
-    .option-card strong { font-size: 1.45rem; line-height: 1.05; }
-    .option-card em { font-style: normal; color: rgba(23,35,63,.68); line-height: 1.35; }
-    .fridge-door { background: #fff8ef; }
-    .command-center { background: #eef8f5; }
-    .garden-path { background: #f5f7ec; }
-    .help-menu { background: #fff4ed; }
-    .orbit-board { background: #f1f4ff; }
-    @media (max-width: 850px) { .picker-hero, .option-grid { grid-template-columns: 1fr; } .option-card { min-height: 150px; } }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <main class="picker-shell">
-    <section class="picker-hero">
-      <div>
-        <p class="eyebrow">Five staging directions</p>
+<body class="command-center actual-site" data-stage="production" data-asset-root="assets">
+  <main class="site-shell">
+    <header class="simple-hero">
+      <div class="simple-title">
+        <p class="eyebrow">Avi is here</p>
         <h1>How to Help</h1>
-        <p>Each option reads the same help-list structure, supports stars, expandable details, local settings, and the QR modal. Pick the visual direction you like, then we can promote it to the main site.</p>
+        <p>We love you. Thank you.</p>
       </div>
       <img src="assets/family-1.jpg" alt="Miri and Avi">
-    </section>
-    <section class="option-grid" aria-label="Staging options">
-      <a class="option-card fridge-door" href="staging_1/">
-  <span>Option 1</span>
-  <strong>Warm Fridge Door</strong>
-  <em>sticky notes, family-photo warmth, tiny useful chores</em>
-</a>
-<a class="option-card command-center" href="staging_2/">
-  <span>Option 2</span>
-  <strong>Care Command Center</strong>
-  <em>tidy dashboard for people who want to scan and jump in</em>
-</a>
-<a class="option-card garden-path" href="staging_3/">
-  <span>Option 3</span>
-  <strong>Garden Path</strong>
-  <em>soft, meandering sections with calm room to breathe</em>
-</a>
-<a class="option-card help-menu" href="staging_4/">
-  <span>Option 4</span>
-  <strong>Help Menu</strong>
-  <em>a cozy menu of ways to help, grouped by appetite</em>
-</a>
-<a class="option-card orbit-board" href="staging_5/">
-  <span>Option 5</span>
-  <strong>Orbit Board</strong>
-  <em>playful tiles and quick filters for a busy little solar system</em>
-</a>
-    </section>
+    </header>
+
+    <section class="sections" data-sections aria-label="Ways to help"></section>
+
+    <footer class="bottom-tools">
+      <button type="button" data-open-qr aria-label="Show QR code">
+        <span aria-hidden="true">▦</span>
+        <span>QR</span>
+      </button>
+      <button type="button" data-open-settings aria-label="Open settings">
+        <span aria-hidden="true">⚙</span>
+        <span>Settings</span>
+      </button>
+    </footer>
   </main>
+
+  <div class="modal-backdrop" data-settings-backdrop hidden></div>
+  <section class="settings-modal" data-settings-modal hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="settings-panel">
+      <header>
+        <div>
+          <p class="eyebrow">How to Help</p>
+          <h2 id="settings-title">Settings</h2>
+        </div>
+        <button type="button" class="plain-x" data-close-settings aria-label="Close settings">×</button>
+      </header>
+      <section class="settings-section">
+        <h3>Style</h3>
+        <div class="style-grid" data-style-grid>
+          <button type="button" data-style-option="cozy"><span></span>Cozy</button>
+          <button type="button" data-style-option="bright"><span></span>Bright</button>
+          <button type="button" data-style-option="night"><span></span>Night</button>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h3>List</h3>
+        <label class="toggle-row"><span>Show descriptions by default</span><input type="checkbox" data-setting="openDescriptions"></label>
+        <label class="toggle-row"><span>Compact list</span><input type="checkbox" data-setting="compact"></label>
+      </section>
+      <details class="settings-section advanced-settings">
+        <summary><span>Advanced</span><span aria-hidden="true">⌄</span></summary>
+        <label>
+          <span>Published Google Doc URL</span>
+          <input type="url" data-doc-url placeholder="https://docs.google.com/document/d/e/2PACX-1vQbbd27IH_bLefhDq0uu_RTxQq0S-WqH5Wk_iawjYdqaXKTiIoB1UHlBS3CN3i1IugfZRaVio5yttKq/pub">
+        </label>
+        <small>Leave blank to use the built-in published Google Doc source.</small>
+      </details>
+      <div class="settings-actions">
+        <button type="button" class="primary-action" data-save-settings>Save</button>
+        <button type="button" data-reset-device>Reset this device</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" data-qr-backdrop hidden></div>
+  <section class="qr-modal" data-qr-modal hidden role="dialog" aria-modal="true" aria-labelledby="qr-title">
+    <div class="qr-panel">
+      <header>
+        <div>
+          <p class="eyebrow">Share</p>
+          <h2 id="qr-title">How to Help</h2>
+        </div>
+        <button type="button" class="plain-x" data-close-qr aria-label="Close QR code">×</button>
+      </header>
+      <img src="assets/qr-live.png" alt="QR code for the How to Help website">
+      <a href="https://talrme.github.io/how-to-help/">https://talrme.github.io/how-to-help/</a>
+    </div>
+  </section>
+
+  <script src="shared/config.js"></script>
+  <script src="shared/app.js"></script>
 </body>
 </html>

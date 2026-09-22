@@ -2,15 +2,14 @@
 
 **Live site:** [https://talrme.github.io/how-to-help/](https://talrme.github.io/how-to-help/)
 
-A small family help-board for the newborn period after Avi's arrival. The root page contains five staging directions; each staging site uses the same data and interaction model but a different visual style.
+A small family help-board for the newborn period after Avi's arrival. The root page uses the simplified Option 2 direction: phone-first, minimal header, live Google Doc content, expandable details, and device-local item ordering.
 
-## Staging Options
+## Site Structure
 
-- `staging_1/` - Warm Fridge Door
-- `staging_2/` - Care Command Center
-- `staging_3/` - Garden Path
-- `staging_4/` - Help Menu
-- `staging_5/` - Orbit Board
+- `index.html` - production page, based on Option 2
+- `styles.css` - production page styling
+- `shared/app.js` - shared parser, live Google Doc fetch, expansion, local settings, and local reordering
+- `staging_1/` through `staging_5/` - earlier visual directions kept for reference
 
 ## Google Doc Source
 
@@ -34,10 +33,10 @@ The expected document format is:
 
 ## Local Preview
 
-Open `index.html` to choose among the five staging options. If live Google Doc fetching is blocked locally, the bundled snapshot still renders the page.
+Open `index.html` to preview the production page. If live Google Doc fetching is blocked locally, the bundled snapshot still renders the page.
 
 ## Notes
 
-- Stars and display settings are stored in browser `localStorage`.
+- Item order and display settings are stored in browser `localStorage`.
 - The QR code points to the live GitHub Pages URL.
 - Placeholder images live in `assets/` and can be replaced later without code changes if filenames stay the same.
