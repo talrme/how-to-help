@@ -11,7 +11,7 @@ This is a static GitHub Pages website for sharing practical ways people can help
 - Shared functionality lives in `shared/app.js`.
 - Shared baseline styling lives in `shared/base.css`.
 - Each staging folder has its own `styles.css` with the visual treatment.
-- `shared/config.js` contains the Google Doc ID, optional published text URL, live site URL, and fallback content snapshot.
+- `shared/config.js` contains the Google Doc ID, permanent published URL, published text URL, live site URL, and fallback content snapshot.
 
 ## Content Rules
 
@@ -35,4 +35,4 @@ Bullets are parsed as help cards. Text before the first ` - ` becomes the card t
 
 ## Live Doc Caveat
 
-Static GitHub Pages cannot authenticate to a private Google Doc. The browser can only fetch a public or published plain-text version if Google allows cross-origin access. Keep the fallback content current unless/until `publishedTextUrl` is configured.
+Static GitHub Pages cannot authenticate to a private Google Doc. The browser reads the published-to-web version at https://docs.google.com/document/d/e/2PACX-1vQbbd27IH_bLefhDq0uu_RTxQq0S-WqH5Wk_iawjYdqaXKTiIoB1UHlBS3CN3i1IugfZRaVio5yttKq/pub; if Google blocks it in-browser, the bundled fallback snapshot keeps the page useful.

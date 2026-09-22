@@ -75,21 +75,42 @@
   }
 
   async function getLiveText() {
-    const customUrl = settings.docTextUrl || config.publishedTextUrl || "";
+    const customUrl = settings.docTextUrl || "";
     const exportUrl = `https://docs.google.com/document/d/${config.docId}/export?format=txt`;
-    const candidates = [customUrl, exportUrl].filter(Boolean);
+    const candidates = [
+      customUrl,
+      config.publishedTextUrl,
+      toTextExportUrl(config.publishedDocUrl),
+      config.publishedDocUrl,
+      exportUrl
+    ].filter(Boolean);
     for (const url of candidates) {
       try {
         const response = await fetch(url, { cache: "no-store" });
         if (!response.ok) continue;
-        const text = await response.text();
+        const text = normalizeFetchedDocText(await response.text());
         const sections = parseDocText(text);
-        if (sections.length) return { text, source: "Live Google Doc" };
+        if (sections.length) return { text, source: "Published Google Doc" };
       } catch {
         // Browser CORS commonly blocks Google Docs exports. The bundled snapshot keeps the page useful.
       }
     }
     return { text: config.fallbackText || "", source: "Snapshot from Google Doc" };
+  }
+
+  function toTextExportUrl(url) {
+    if (!url) return "";
+    if (url.includes("output=txt")) return url;
+    return `${url}${url.includes("?") ? "&" : "?"}output=txt`;
+  }
+
+  function normalizeFetchedDocText(text) {
+    const raw = String(text || "");
+    if (!/^\s*</.test(raw) || typeof DOMParser === "undefined") return raw;
+    const doc = new DOMParser().parseFromString(raw, "text/html");
+    doc.querySelectorAll("script, style, noscript").forEach((node) => node.remove());
+    const content = doc.querySelector(".doc-content, #contents, #content, main, body");
+    return (content?.innerText || content?.textContent || raw).replace(/\u00a0/g, " ");
   }
 
   function applySettingsToPage() {

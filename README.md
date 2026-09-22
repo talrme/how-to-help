@@ -14,18 +14,17 @@ A small family help-board for the newborn period after Avi's arrival. The root p
 
 ## Google Doc Source
 
-Source doc: https://docs.google.com/document/d/1MsgLo_auKjnxbC5OEMan70R_FH8p7EzHvC7z9DwmTc8/edit?usp=sharing
+Editable source doc: https://docs.google.com/document/d/1MsgLo_auKjnxbC5OEMan70R_FH8p7EzHvC7z9DwmTc8/edit?usp=sharing
 
-The app tries to read a live plain-text export from the Google Doc on page load. Browsers may block that because Google Docs exports are not always CORS-friendly. If the live fetch fails, the site uses the bundled snapshot in `shared/config.js`.
+Published source used by the website: https://docs.google.com/document/d/e/2PACX-1vQbbd27IH_bLefhDq0uu_RTxQq0S-WqH5Wk_iawjYdqaXKTiIoB1UHlBS3CN3i1IugfZRaVio5yttKq/pub
 
-For a more reliable live setup:
+The app now uses the published-to-web Google Doc as the permanent live source. It first tries the published plain-text export, then the published HTML page, then the editable doc export, and finally the bundled snapshot in `shared/config.js` if Google blocks browser access.
 
-1. Open the Google Doc.
-2. Go to `File -> Share -> Publish to web`.
-3. Publish as a document.
-4. Copy the published URL.
-5. Add `?output=txt` to the end if Google does not include it.
-6. Paste that URL into `publishedTextUrl` in `shared/config.js`, or paste it into the site's Advanced settings on a specific device.
+If the published link ever changes:
+
+1. Open the new published Google Doc URL.
+2. Update `publishedDocUrl` and `publishedTextUrl` in `shared/config.js`.
+3. Use the same URL in the staging footer links if needed.
 
 The expected document format is:
 
