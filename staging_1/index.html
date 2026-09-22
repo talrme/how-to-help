@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How to Help - Warm Fridge Door</title>
+  <meta name="theme-color" content="#fff8ef">
+  <meta name="apple-mobile-web-app-title" content="How to Help">
+  <link rel="icon" href="../assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/icon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="fridge-door" data-stage="staging_1">
+  <main class="site-shell">
+    <header class="hero">
+      <div class="hero-photo">
+        <img src="../assets/family-1.jpg" alt="Miri and Avi">
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">Avi is here</p>
+        <h1>How to Help</h1>
+        <p>Small, concrete ways to help Tal, Sophie, Miri, and Avi while the newborn days are sweet, blurry, and very real.</p>
+        <div class="hero-actions">
+          <button type="button" class="primary-action" data-scroll-to-list>See the list</button>
+          <button type="button" class="plain-action" data-open-qr>QR code</button>
+        </div>
+      </div>
+      <button type="button" class="settings-button" data-open-settings aria-label="Open settings" title="Settings">
+        <span aria-hidden="true">⚙</span>
+        <span>Settings</span>
+      </button>
+    </header>
+
+    <section class="intro-strip" aria-label="How this works">
+      <div><strong>Pick something small.</strong><span>Every item is meant to be useful without a lot of coordination.</span></div>
+      <div><strong>Tap for details.</strong><span>Descriptions expand when the doc has more context.</span></div>
+      <div><strong>Star your ideas.</strong><span>Stars are saved only on this device and float to the top.</span></div>
+    </section>
+
+    <nav class="section-tabs" data-section-tabs aria-label="Help sections"></nav>
+
+    <section class="photo-band" aria-label="Family photos and placeholders">
+      <img src="../assets/family-2.jpg" alt="Placeholder: fresh laundry">
+      <img src="../assets/family-3.jpg" alt="Placeholder: tiny helper">
+      <img src="../assets/family-4.jpg" alt="Placeholder: dinner drop-off">
+    </section>
+
+    <section class="content-heading">
+      <p class="eyebrow" data-source-status>Loading list</p>
+      <h2>Ways to jump in</h2>
+    </section>
+    <section class="sections" data-sections aria-label="Ways to help"></section>
+
+    <section class="closing-card">
+      <img src="../assets/family-5.jpg" alt="Placeholder: quiet nap shift">
+      <div>
+        <p class="eyebrow">Thank you</p>
+        <h2>Seriously, the boring stuff counts.</h2>
+        <p>Trash, snacks, school pickup, stroller walks, one drawer, one bath, one nap shift. It all adds up.</p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <a href="https://docs.google.com/document/d/1MsgLo_auKjnxbC5OEMan70R_FH8p7EzHvC7z9DwmTc8/edit?usp=sharing" target="_blank" rel="noopener">Source Google Doc</a>
+      <button type="button" data-open-qr>Show QR code</button>
+    </footer>
+  </main>
+
+  <div class="modal-backdrop" data-settings-backdrop hidden></div>
+  <section class="settings-modal" data-settings-modal hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="settings-panel">
+      <header>
+        <div>
+          <p class="eyebrow">How to Help</p>
+          <h2 id="settings-title">Settings</h2>
+        </div>
+        <button type="button" class="plain-x" data-close-settings aria-label="Close settings">×</button>
+      </header>
+      <section class="settings-section">
+        <h3>Style</h3>
+        <div class="style-grid" data-style-grid>
+          <button type="button" data-style-option="cozy"><span></span>Cozy</button>
+          <button type="button" data-style-option="bright"><span></span>Bright</button>
+          <button type="button" data-style-option="night"><span></span>Night</button>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h3>List behavior</h3>
+        <label class="toggle-row"><span>Show descriptions by default</span><input type="checkbox" data-setting="openDescriptions"></label>
+        <label class="toggle-row"><span>Starred items first</span><input type="checkbox" data-setting="starredFirst"></label>
+        <label class="toggle-row"><span>Compact cards</span><input type="checkbox" data-setting="compact"></label>
+      </section>
+      <details class="settings-section advanced-settings">
+        <summary><span>Advanced</span><span aria-hidden="true">⌄</span></summary>
+        <label>
+          <span>Published Google Doc text URL</span>
+          <input type="url" data-doc-url placeholder="https://docs.google.com/document/d/e/.../pub?output=txt">
+        </label>
+        <small>Leave blank to try the standard Google export URL. If browser security blocks it, the site uses the bundled snapshot.</small>
+      </details>
+      <div class="settings-actions">
+        <button type="button" class="primary-action" data-save-settings>Save</button>
+        <button type="button" data-reset-device>Reset this device</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" data-qr-backdrop hidden></div>
+  <section class="qr-modal" data-qr-modal hidden role="dialog" aria-modal="true" aria-labelledby="qr-title">
+    <div class="qr-panel">
+      <header>
+        <div>
+          <p class="eyebrow">Share</p>
+          <h2 id="qr-title">How to Help</h2>
+        </div>
+        <button type="button" class="plain-x" data-close-qr aria-label="Close QR code">×</button>
+      </header>
+      <img src="../assets/qr-live.png" alt="QR code for the How to Help website">
+      <a href="https://talrme.github.io/how-to-help/">https://talrme.github.io/how-to-help/</a>
+    </div>
+  </section>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/app.js"></script>
+</body>
+</html>

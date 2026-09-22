@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Help - staging</title>
+  <meta name="theme-color" content="#fff8ef">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="shared/base.css">
+  <style>
+    body { background: #fbf4ea; color: #17233f; }
+    .picker-shell { max-width: 1120px; margin: 0 auto; padding: 44px 22px; }
+    .picker-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: end; }
+    .picker-hero img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; box-shadow: 0 18px 60px rgba(23,35,63,.16); }
+    .picker-hero h1 { font-size: clamp(3rem, 8vw, 7rem); line-height: .86; margin: 0 0 16px; letter-spacing: 0; }
+    .picker-hero p { font-size: 1.1rem; line-height: 1.55; max-width: 56ch; }
+    .option-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-top: 34px; }
+    .option-card { min-height: 210px; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: inherit; border: 1px solid rgba(23,35,63,.13); box-shadow: 0 16px 40px rgba(23,35,63,.08); transition: transform .18s ease, box-shadow .18s ease; }
+    .option-card:hover { transform: translateY(-4px); box-shadow: 0 22px 55px rgba(23,35,63,.14); }
+    .option-card span { text-transform: uppercase; font-size: .72rem; letter-spacing: .16em; font-weight: 800; opacity: .7; }
+    .option-card strong { font-size: 1.45rem; line-height: 1.05; }
+    .option-card em { font-style: normal; color: rgba(23,35,63,.68); line-height: 1.35; }
+    .fridge-door { background: #fff8ef; }
+    .command-center { background: #eef8f5; }
+    .garden-path { background: #f5f7ec; }
+    .help-menu { background: #fff4ed; }
+    .orbit-board { background: #f1f4ff; }
+    @media (max-width: 850px) { .picker-hero, .option-grid { grid-template-columns: 1fr; } .option-card { min-height: 150px; } }
+  </style>
+</head>
+<body>
+  <main class="picker-shell">
+    <section class="picker-hero">
+      <div>
+        <p class="eyebrow">Five staging directions</p>
+        <h1>How to Help</h1>
+        <p>Each option reads the same help-list structure, supports stars, expandable details, local settings, and the QR modal. Pick the visual direction you like, then we can promote it to the main site.</p>
+      </div>
+      <img src="assets/family-1.jpg" alt="Miri and Avi">
+    </section>
+    <section class="option-grid" aria-label="Staging options">
+      <a class="option-card fridge-door" href="staging_1/">
+  <span>Option 1</span>
+  <strong>Warm Fridge Door</strong>
+  <em>sticky notes, family-photo warmth, tiny useful chores</em>
+</a>
+<a class="option-card command-center" href="staging_2/">
+  <span>Option 2</span>
+  <strong>Care Command Center</strong>
+  <em>tidy dashboard for people who want to scan and jump in</em>
+</a>
+<a class="option-card garden-path" href="staging_3/">
+  <span>Option 3</span>
+  <strong>Garden Path</strong>
+  <em>soft, meandering sections with calm room to breathe</em>
+</a>
+<a class="option-card help-menu" href="staging_4/">
+  <span>Option 4</span>
+  <strong>Help Menu</strong>
+  <em>a cozy menu of ways to help, grouped by appetite</em>
+</a>
+<a class="option-card orbit-board" href="staging_5/">
+  <span>Option 5</span>
+  <strong>Orbit Board</strong>
+  <em>playful tiles and quick filters for a busy little solar system</em>
+</a>
+    </section>
+  </main>
+</body>
+</html>

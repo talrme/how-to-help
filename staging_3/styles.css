@@ -1,0 +1,17 @@
+body.garden-path {
+  --page-bg: #f5f7ec;
+  --paper: #fffff7;
+  --panel: rgba(255,255,255,.76);
+  --accent: #6b8e3f;
+  --accent-2: #d3815f;
+  --radius: 8px;
+}
+.garden-path .hero { min-height: 560px; grid-template-columns: 1fr; }
+.garden-path .hero-photo { position: absolute; inset: 18px; z-index: -1; }
+.garden-path .hero-photo img { filter: saturate(.9); opacity: .5; }
+.garden-path .hero-copy { width: min(720px, 100%); background: rgba(255,255,247,.78); border: 1px solid var(--line); border-radius: 8px; backdrop-filter: blur(12px); }
+.garden-path .sections { grid-template-columns: repeat(5, minmax(260px, 1fr)); overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x proximity; }
+.garden-path .help-section { scroll-snap-align: start; }
+.garden-path .photo-band { grid-template-columns: repeat(3, 1fr); }
+.garden-path .help-card { border-left: 5px solid color-mix(in srgb, var(--accent) 60%, white); }
+@media (max-width: 820px) { .garden-path .sections { display: flex; } .garden-path .help-section { min-width: 86vw; } }
