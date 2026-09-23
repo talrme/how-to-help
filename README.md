@@ -29,6 +29,7 @@ The expected document format is:
 - Section heading on its own line, like `House stuff`.
 - Bullets below each heading.
 - Use `Title - details` when you want the website card to show a short title first and keep the details collapsed.
+- Put `End` or `Website End` on its own line when the website should stop reading the doc. Anything below that line can stay in the Google Doc as notes without appearing on the site.
 
 ## Local Preview
 

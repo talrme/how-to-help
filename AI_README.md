@@ -24,6 +24,8 @@ The Google Doc parser expects these headings:
 
 Bullets are parsed as help cards. Text before the first ` - ` becomes the card title; text after it becomes collapsed detail text.
 
+Put `End` or `Website End` on its own line in the Google Doc to stop website parsing. Any notes below that marker should remain visible in the doc but not render on the site.
+
 ## User Preferences
 
 - Keep the site pretty, warm, and mobile-friendly.

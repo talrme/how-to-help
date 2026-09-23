@@ -2,6 +2,7 @@
   const config = window.HOW_TO_HELP_CONFIG || {};
   const storageKey = "how-to-help:v1";
   const headingNames = new Set(["house stuff", "miri help", "avi help", "sophie and tal help", "projects"]);
+  const stopMarkerNames = new Set(["end", "website end", "end website", "[[end]]", "[[website end]]"]);
   const defaultSettings = {
     style: "cozy",
     openDescriptions: false,
@@ -87,6 +88,7 @@
     for (const raw of lines) {
       const line = stripBullet(raw);
       const lower = line.toLowerCase();
+      if (stopMarkerNames.has(lower)) break;
       if (lower === "things to help with") continue;
       if (headingNames.has(lower)) {
         current = { id: slug(line), title: line, items: [] };
