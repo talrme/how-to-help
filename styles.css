@@ -134,7 +134,7 @@ body.actual-site {
   align-items: center;
   justify-content: center;
   padding: 14px 12px;
-  background: linear-gradient(180deg, rgba(238,248,245,0), color-mix(in srgb, var(--page-bg) 78%, transparent) 62%, var(--page-bg));
+  pointer-events: none;
 }
 
 .projects-toggle,
@@ -144,6 +144,7 @@ body.actual-site {
 }
 
 .projects-overlay-button {
+  pointer-events: auto;
   border: 1px solid rgba(23,35,63,.12);
   border-radius: 999px;
   background: rgba(255,255,255,.96);
@@ -832,10 +833,6 @@ body.actual-site[data-style="night"] .toggle-row i {
 
 body.actual-site[data-style="night"] .toggle-row input:checked + i {
   background: color-mix(in srgb, var(--accent) 70%, #111827);
-}
-
-body.actual-site[data-style="night"] .projects-preview-fade {
-  background: linear-gradient(180deg, rgba(17,24,39,0), color-mix(in srgb, var(--page-bg) 78%, transparent) 62%, var(--page-bg));
 }
 
 body.actual-site[data-style="night"] .projects-overlay-button {
