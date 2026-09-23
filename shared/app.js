@@ -227,12 +227,13 @@
         const items = orderedItems(section);
         const isProjects = section.id === "projects";
         const projectsVisible = !isProjects || Boolean(settings.showProjects);
-        const visibleItems = isProjects && !projectsVisible ? items.slice(0, 6) : items;
-        const hasProjectPreview = isProjects && !projectsVisible && items.length > 3;
+        const previewProjectCount = 3;
+        const visibleItems = isProjects && !projectsVisible ? items.slice(0, previewProjectCount) : items;
+        const hasProjectPreview = isProjects && !projectsVisible && items.length > 0;
         const itemHtml = visibleItems
           .map((item, itemIndex) => {
             const hasDescription = Boolean(item.description);
-            const isPreview = hasProjectPreview && itemIndex >= 3;
+            const isPreview = hasProjectPreview;
             const open = settings.openDescriptions && hasDescription && !isPreview;
             const main = hasDescription
               ? `<button type="button" class="card-main" ${isPreview ? "tabindex=\"-1\"" : "data-toggle-card"} aria-expanded="${open ? "true" : "false"}">
