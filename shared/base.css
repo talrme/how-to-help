@@ -236,6 +236,16 @@ img { max-width: 100%; display: block; }
 .advanced-settings summary { display: flex; justify-content: space-between; font-weight: 850; cursor: pointer; }
 .advanced-settings input { width: 100%; margin-top: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
 .advanced-settings small { display: block; color: var(--muted); line-height: 1.4; margin-top: 8px; }
+.doc-source-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 12px;
+  color: var(--accent);
+  font-size: .9rem;
+  font-weight: 850;
+  text-decoration: none;
+}
+.doc-source-link:hover, .doc-source-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
 .settings-actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 10px; }
 .qr-panel { text-align: center; }
 .qr-panel img { width: min(320px, 82vw); margin: 10px auto 16px; border: 12px solid white; border-radius: 8px; }

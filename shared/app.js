@@ -11,10 +11,33 @@
   };
   let settings = loadSettings();
   let parsedSections = [];
+  let activePhotoIndex = 0;
+  let photoCloseTimer = null;
+  let photoReturnFocus = null;
+  let shareCopyTimer = null;
+  const galleryImages = [
+    { name: "hospital-family-bed.jpg", alt: "Tal, Sophie, Miri, and Avi in the hospital room", position: "50% 42%" },
+    { name: "miri-meets-avi.jpg", alt: "Miri meeting Avi in the hospital", position: "50% 34%" },
+    { name: "sophie-and-avi-hospital.jpg", alt: "Sophie holding Avi in the hospital", position: "58% 42%" },
+    { name: "avi-newborn-portrait.jpg", alt: "Avi sleeping as a newborn", position: "50% 36%" },
+    { name: "sophie-wearing-avi.jpg", alt: "Sophie wearing Avi in a wrap", position: "58% 45%" },
+    { name: "ride-home-with-avi.jpg", alt: "Tal, Sophie, and Avi riding home", position: "52% 50%" },
+    { name: "miri-checking-on-avi.jpg", alt: "Miri checking on Avi at home", position: "45% 44%" },
+    { name: "sophie-holding-avi-window.jpg", alt: "Sophie holding Avi by the window", position: "58% 42%" },
+    { name: "miri-and-avi-with-grandma.jpg", alt: "Miri and Avi sitting with grandma", position: "55% 45%" },
+    { name: "miri-playground-piggyback.jpg", alt: "Miri getting a playground piggyback ride", position: "50% 30%" },
+    { name: "siblings-car-seats.jpg", alt: "Miri and Avi in their car seats", position: "54% 50%" },
+    { name: "family-meets-avi.jpg", alt: "Family meeting Avi at home", position: "62% 45%" },
+    { name: "miri-and-avi.jpg", alt: "Miri holding Avi at home", position: "52% 38%" },
+    { name: "grandpa-miri-avi-car.jpg", alt: "Miri, Avi, and grandpa in the car", position: "48% 42%" },
+    { name: "grandma-reading-with-kids.jpg", alt: "Grandma reading with kids", position: "58% 44%" }
+  ];
 
   function loadSettings() {
     try {
-      return { ...defaultSettings, ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
+      const loaded = { ...defaultSettings, ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
+      if (loaded.style === "bright") loaded.style = "bloom";
+      return loaded;
     } catch {
       return { ...defaultSettings };
     }
@@ -22,6 +45,14 @@
 
   function saveSettings() {
     localStorage.setItem(storageKey, JSON.stringify(settings));
+  }
+
+  function cleanShareUrl() {
+    if (config.liveSiteUrl) return config.liveSiteUrl;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.href;
   }
 
   function stripBullet(line) {
@@ -46,6 +77,7 @@
 
   function parseDocText(text) {
     const lines = String(text || "")
+      .replace(/\\n/g, "\n")
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean);
@@ -162,17 +194,26 @@
   }
 
   function photoBreak(index) {
-    const root = document.body.dataset.assetRoot || "../assets";
     const imageSets = [
-      ["family-2.jpg", "family-3.jpg", "family-4.jpg"],
-      ["family-5.jpg", "family-6.jpg", "family-2.jpg"],
-      ["family-3.jpg", "family-4.jpg", "family-5.jpg"],
-      ["family-6.jpg", "family-2.jpg", "family-3.jpg"]
+      [9, 1, 14],
+      [2, 3, 4],
+      [5, 7, 11],
+      [6, 13, 10]
     ];
     const images = imageSets[index % imageSets.length];
-    return `<div class="photo-break" aria-hidden="true">
-      ${images.map((name) => `<img src="${root}/${name}" alt="">`).join("")}
+    return `<div class="photo-break" style="--photo-count:${images.length}">
+      ${images.map((galleryIndex) => {
+        const image = galleryImages[galleryIndex];
+        return `<button type="button" class="photo-thumb" data-gallery-index="${galleryIndex}" aria-label="Open photo: ${escapeHtml(image.alt)}">
+          <img src="${photoSrc(image)}" style="object-position:${image.position}" alt="">
+        </button>`;
+      }).join("")}
     </div>`;
+  }
+
+  function photoSrc(image) {
+    const root = document.body.dataset.assetRoot || "../assets";
+    return `${root}/${image.name}`;
   }
 
   function renderSections(sections) {
@@ -182,35 +223,49 @@
       .map((section, index) => {
         const items = orderedItems(section);
         const itemHtml = items
-          .map((item, itemIndex) => {
-            const open = settings.openDescriptions && item.description;
-            return `<article class="help-card" data-section-id="${section.id}" data-item-id="${item.id}">
-              <button type="button" class="move-handle" data-move-handle aria-label="Move ${escapeHtml(item.title)}" aria-expanded="false">
-                <span></span><span></span><span></span>
-              </button>
-              <button type="button" class="card-main" data-toggle-card aria-expanded="${open ? "true" : "false"}">
-                <span class="item-title">${escapeHtml(item.title)}</span>
-                <span class="expand-mark" aria-hidden="true">⌄</span>
-              </button>
-              <div class="move-controls" hidden>
-                <button type="button" data-move-item="up" data-section-id="${section.id}" data-item-id="${item.id}" ${itemIndex === 0 ? "disabled" : ""}>Move up</button>
-                <button type="button" data-move-item="down" data-section-id="${section.id}" data-item-id="${item.id}" ${itemIndex === items.length - 1 ? "disabled" : ""}>Move down</button>
-              </div>
-              <div class="item-details" ${open ? "" : "hidden"}>
-                <p>${escapeHtml(item.description || "No extra details yet. If this sounds useful, ask Tal or Sophie what would help most.")}</p>
-              </div>
+          .map((item) => {
+            const hasDescription = Boolean(item.description);
+            const open = settings.openDescriptions && hasDescription;
+            const main = hasDescription
+              ? `<button type="button" class="card-main" data-toggle-card aria-expanded="${open ? "true" : "false"}">
+                  <span class="item-title">${escapeHtml(item.title)}</span>
+                  <span class="expand-mark" aria-hidden="true">⌄</span>
+                </button>`
+              : `<div class="card-main card-static">
+                  <span class="item-title">${escapeHtml(item.title)}</span>
+                </div>`;
+            const details = hasDescription
+              ? `<div class="item-details" ${open ? "" : "hidden"}>
+                  <p>${escapeHtml(item.description)}</p>
+                </div>`
+              : "";
+            return `<article class="help-card ${hasDescription ? "has-description" : "is-static"}" data-section-id="${section.id}" data-item-id="${item.id}">
+              ${main}
+              ${details}
             </article>`;
           })
           .join("");
+        const sectionPhotos = index > 0 ? photoBreak(index - 1) : "";
         const sectionHtml = `<section class="help-section" id="${section.id}" style="--section-index:${index}">
           <header>
             <h3>${escapeHtml(section.title)}</h3>
           </header>
+          ${sectionPhotos}
           <div class="help-list">${itemHtml}</div>
         </section>`;
-        return `${sectionHtml}${index < sections.length - 1 ? photoBreak(index) : ""}`;
+        return sectionHtml;
       })
       .join("");
+  }
+
+  function setDescriptionCards(open) {
+    document.querySelectorAll(".help-card.has-description").forEach((card) => {
+      const toggle = card.querySelector("[data-toggle-card]");
+      const details = card.querySelector(".item-details");
+      if (!toggle || !details) return;
+      toggle.setAttribute("aria-expanded", String(open));
+      details.hidden = !open;
+    });
   }
 
   function escapeHtml(value) {
@@ -223,8 +278,119 @@
     })[char]);
   }
 
+  function updatePhoto(index) {
+    const modal = document.querySelector("[data-photo-lightbox]");
+    const image = modal?.querySelector("[data-photo-full]");
+    const caption = modal?.querySelector("[data-photo-caption]");
+    if (!modal || !image || !caption) return;
+    activePhotoIndex = (index + galleryImages.length) % galleryImages.length;
+    const current = galleryImages[activePhotoIndex];
+    image.src = photoSrc(current);
+    image.alt = current.alt;
+    caption.textContent = `${activePhotoIndex + 1} / ${galleryImages.length}`;
+  }
+
+  function openPhoto(index) {
+    const modal = document.querySelector("[data-photo-lightbox]");
+    if (!modal) return;
+    clearTimeout(photoCloseTimer);
+    photoReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    updatePhoto(Number(index) || 0);
+    modal.hidden = false;
+    modal.classList.remove("is-closing");
+    document.body.classList.add("photo-modal-open");
+    requestAnimationFrame(() => modal.classList.add("is-open"));
+    modal.querySelector(".photo-frame")?.focus({ preventScroll: true });
+  }
+
+  function closePhoto() {
+    const modal = document.querySelector("[data-photo-lightbox]");
+    if (!modal || modal.hidden) return;
+    clearTimeout(photoCloseTimer);
+    modal.classList.remove("is-open");
+    modal.classList.add("is-closing");
+    document.body.classList.remove("photo-modal-open");
+    photoCloseTimer = setTimeout(() => {
+      modal.hidden = true;
+      modal.classList.remove("is-closing");
+      photoReturnFocus?.focus?.({ preventScroll: true });
+      photoReturnFocus = null;
+    }, 240);
+  }
+
+  function shiftPhoto(direction) {
+    updatePhoto(activePhotoIndex + direction);
+  }
+
+  function updateShareUi(copied = false) {
+    const url = cleanShareUrl();
+    const input = document.querySelector("[data-share-url]");
+    const copyButton = document.querySelector("[data-copy-share]");
+    const status = document.querySelector("[data-copy-status]");
+    if (input) input.value = url;
+    if (copyButton) copyButton.textContent = copied ? "Copied" : "Copy";
+    if (status) status.textContent = copied ? "Copied to clipboard." : "";
+  }
+
+  function markShareCopied() {
+    window.clearTimeout(shareCopyTimer);
+    updateShareUi(true);
+    shareCopyTimer = window.setTimeout(() => updateShareUi(false), 1800);
+  }
+
+  function fallbackCopy(text) {
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.top = "-9999px";
+    document.body.appendChild(input);
+    input.select();
+    try {
+      document.execCommand("copy");
+      markShareCopied();
+    } finally {
+      input.remove();
+    }
+  }
+
+  function copyShareUrl() {
+    const url = cleanShareUrl();
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      navigator.clipboard.writeText(url).then(markShareCopied).catch(() => fallbackCopy(url));
+      return;
+    }
+    fallbackCopy(url);
+  }
+
+  function openShare() {
+    window.clearTimeout(shareCopyTimer);
+    updateShareUi(false);
+    document.querySelector("[data-share-modal]")?.removeAttribute("hidden");
+  }
+
+  function closeShare() {
+    window.clearTimeout(shareCopyTimer);
+    updateShareUi(false);
+    document.querySelector("[data-share-modal]")?.setAttribute("hidden", "");
+  }
+
+  function openInstall() {
+    document.querySelector("[data-install-modal]")?.removeAttribute("hidden");
+  }
+
+  function closeInstall() {
+    document.querySelector("[data-install-modal]")?.setAttribute("hidden", "");
+  }
+
   function bindInteractions() {
     document.addEventListener("click", (event) => {
+      const galleryButton = event.target.closest("[data-gallery-index]");
+      if (galleryButton) {
+        openPhoto(galleryButton.dataset.galleryIndex);
+        return;
+      }
+
       const toggle = event.target.closest("[data-toggle-card]");
       if (toggle) {
         const card = toggle.closest(".help-card");
@@ -260,9 +426,25 @@
       }
 
       if (event.target.closest("[data-open-settings]")) openModal("settings");
-      if (event.target.closest("[data-close-settings]") || event.target === document.querySelector("[data-settings-backdrop]")) closeModal("settings");
-      if (event.target.closest("[data-open-qr]")) openModal("qr");
-      if (event.target.closest("[data-close-qr]") || event.target === document.querySelector("[data-qr-backdrop]")) closeModal("qr");
+      if (
+        event.target.closest("[data-close-settings]") ||
+        event.target === document.querySelector("[data-settings-backdrop]") ||
+        event.target === document.querySelector("[data-settings-modal]")
+      ) closeModal("settings");
+      if (event.target.closest("[data-open-share]")) openShare();
+      if (
+        event.target.closest("[data-close-share]") ||
+        event.target === document.querySelector("[data-share-modal]")
+      ) closeShare();
+      if (event.target.closest("[data-copy-share]")) copyShareUrl();
+      if (event.target.closest("[data-open-install-from-share]")) {
+        closeShare();
+        openInstall();
+      }
+      if (event.target.closest("[data-close-install]") || event.target === document.querySelector("[data-install-modal]")) closeInstall();
+      if (event.target.closest("[data-close-photo]") || event.target === document.querySelector("[data-photo-lightbox]")) closePhoto();
+      if (event.target.closest("[data-photo-prev]")) shiftPhoto(-1);
+      if (event.target.closest("[data-photo-next]")) shiftPhoto(1);
       if (event.target.closest("[data-scroll-to-list]")) document.querySelector("[data-sections]")?.scrollIntoView({ behavior: "smooth" });
 
       const styleButton = event.target.closest("[data-style-option]");
@@ -293,10 +475,33 @@
       }
     });
 
+    document.addEventListener("change", (event) => {
+      const input = event.target.closest("[data-setting]");
+      if (!input) return;
+      settings[input.dataset.setting] = input.checked;
+      saveSettings();
+      applySettingsToPage();
+      if (input.dataset.setting === "openDescriptions") {
+        setDescriptionCards(input.checked);
+      }
+    });
+
     document.addEventListener("keydown", (event) => {
+      const photoModal = document.querySelector("[data-photo-lightbox]");
+      const photoIsOpen = photoModal && !photoModal.hidden;
+      if (photoIsOpen && event.key === "ArrowLeft") {
+        shiftPhoto(-1);
+        return;
+      }
+      if (photoIsOpen && event.key === "ArrowRight") {
+        shiftPhoto(1);
+        return;
+      }
       if (event.key === "Escape") {
+        closePhoto();
         closeModal("settings");
-        closeModal("qr");
+        closeShare();
+        closeInstall();
       }
     });
   }

@@ -30,9 +30,24 @@ Bullets are parsed as help cards. Text before the first ` - ` becomes the card t
 - Use real family imagery when available and easy-to-replace placeholders elsewhere.
 - Avoid big explanatory text blocks before the useful list.
 - Keep the production page direct: title, image, sections, bottom QR/settings.
+- The main `How to Help` title should stay on one line on phone and desktop.
+- The hero subtitle should be one line under the main title: "Avi is here! We love you! Thank you!!"
+- Keep mobile as the primary layout. On desktop, keep the help sections in a calm centered column; do not interleave photo strips as separate masonry/grid columns.
+- Photo rows should sit under the section title for the following section, starting with the second section, rather than dangling at the bottom of the previous section.
+- The `Miri Help` section photo row should use photos that include Miri.
+- The hero uses a three-photo strip, not one large hero image. Current hero images are `hospital-family-bed.jpg`, `miri-and-avi-with-grandma.jpg`, and `miri-and-avi.jpg`.
 - Settings should be local to the device.
+- Keep a subtle link to the editable Google Doc in the Advanced settings area.
+- Settings themes are Cozy, Bloom, and Night. Do not bring back the vague Bright option.
+- Boolean settings should use modern slider-style toggles rather than plain checkboxes.
+- Dark mode must keep modal controls readable, especially close buttons.
+- All modals should close when clicking outside the panel, plus with Escape when practical.
 - A QR-code modal should be available from the bottom controls.
-- Item reordering is saved locally per device in `localStorage`.
+- The bottom sharing control should follow the World Cup-style share pattern: link field, Copy button/status, QR card, and a save-to-phone details modal.
+- Use root `help-icon.png` for the favicon, Apple touch icon, manifest icon, and save-to-phone/share modal app icons.
+- Description-less list items should render as simple non-expandable rows.
+- The old reorder handle UI was intentionally removed; do not show grabber lines on tasks unless Tal asks for reordering again.
+- Photo thumbnails and the hero photo open a lightbox with next/previous navigation.
 
 ## Live Doc Caveat
 

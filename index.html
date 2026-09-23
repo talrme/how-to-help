@@ -6,29 +6,38 @@
   <title>How to Help</title>
   <meta name="theme-color" content="#eef8f5">
   <meta name="apple-mobile-web-app-title" content="How to Help">
-  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/icon.svg">
+  <link rel="icon" href="help-icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="help-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="shared/base.css">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="command-center actual-site" data-stage="production" data-asset-root="assets">
+<body class="command-center actual-site" data-stage="production" data-asset-root="images">
   <main class="site-shell">
     <header class="simple-hero">
       <div class="simple-title">
-        <p class="eyebrow">Avi is here</p>
         <h1>How to Help</h1>
-        <p>We love you. Thank you.</p>
+        <p>Avi is here! We love you! Thank you!!</p>
       </div>
-      <img src="assets/family-1.jpg" alt="Miri and Avi">
+      <div class="photo-break hero-photo-strip" aria-label="Family photos">
+        <button type="button" class="photo-thumb" data-gallery-index="0" aria-label="Open photo of Tal, Sophie, Miri, and Avi in the hospital room">
+          <img src="images/hospital-family-bed.jpg" style="object-position:50% 42%" alt="Tal, Sophie, Miri, and Avi in the hospital room">
+        </button>
+        <button type="button" class="photo-thumb" data-gallery-index="8" aria-label="Open photo of Miri and Avi sitting with grandma">
+          <img src="images/miri-and-avi-with-grandma.jpg" style="object-position:55% 45%" alt="Miri and Avi sitting with grandma">
+        </button>
+        <button type="button" class="photo-thumb" data-gallery-index="12" aria-label="Open photo of Miri holding Avi at home">
+          <img src="images/miri-and-avi.jpg" style="object-position:52% 38%" alt="Miri holding Avi at home">
+        </button>
+      </div>
     </header>
 
     <section class="sections" data-sections aria-label="Ways to help"></section>
 
     <footer class="bottom-tools">
-      <button type="button" data-open-qr aria-label="Show QR code">
-        <span aria-hidden="true">▦</span>
-        <span>QR</span>
+      <button type="button" data-open-share aria-label="Share or save this site">
+        <span aria-hidden="true">↗</span>
+        <span>Share</span>
       </button>
       <button type="button" data-open-settings aria-label="Open settings">
         <span aria-hidden="true">⚙</span>
@@ -51,14 +60,14 @@
         <h3>Style</h3>
         <div class="style-grid" data-style-grid>
           <button type="button" data-style-option="cozy"><span></span>Cozy</button>
-          <button type="button" data-style-option="bright"><span></span>Bright</button>
+          <button type="button" data-style-option="bloom"><span></span>Bloom</button>
           <button type="button" data-style-option="night"><span></span>Night</button>
         </div>
       </section>
       <section class="settings-section">
         <h3>List</h3>
-        <label class="toggle-row"><span>Show descriptions by default</span><input type="checkbox" data-setting="openDescriptions"></label>
-        <label class="toggle-row"><span>Compact list</span><input type="checkbox" data-setting="compact"></label>
+        <label class="toggle-row"><span>Show descriptions by default</span><input type="checkbox" data-setting="openDescriptions"><i aria-hidden="true"></i></label>
+        <label class="toggle-row"><span>Compact list</span><input type="checkbox" data-setting="compact"><i aria-hidden="true"></i></label>
       </section>
       <details class="settings-section advanced-settings">
         <summary><span>Advanced</span><span aria-hidden="true">⌄</span></summary>
@@ -67,6 +76,7 @@
           <input type="url" data-doc-url placeholder="https://docs.google.com/document/d/e/2PACX-1vQbbd27IH_bLefhDq0uu_RTxQq0S-WqH5Wk_iawjYdqaXKTiIoB1UHlBS3CN3i1IugfZRaVio5yttKq/pub">
         </label>
         <small>Leave blank to use the built-in published Google Doc source.</small>
+        <a class="doc-source-link" href="https://docs.google.com/document/d/1MsgLo_auKjnxbC5OEMan70R_FH8p7EzHvC7z9DwmTc8/edit?usp=sharing" target="_blank" rel="noopener">Open Google Doc</a>
       </details>
       <div class="settings-actions">
         <button type="button" class="primary-action" data-save-settings>Save</button>
@@ -75,18 +85,90 @@
     </div>
   </section>
 
-  <div class="modal-backdrop" data-qr-backdrop hidden></div>
-  <section class="qr-modal" data-qr-modal hidden role="dialog" aria-modal="true" aria-labelledby="qr-title">
-    <div class="qr-panel">
-      <header>
+  <section class="share-modal" data-share-modal hidden role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="share-panel">
+      <header class="share-header">
         <div>
           <p class="eyebrow">Share</p>
-          <h2 id="qr-title">How to Help</h2>
+          <h2 id="share-title">How to Help</h2>
+          <p>Send the link, scan the code, or save this page to a phone.</p>
         </div>
-        <button type="button" class="plain-x" data-close-qr aria-label="Close QR code">×</button>
+        <button type="button" class="plain-x share-close" data-close-share aria-label="Close share">×</button>
       </header>
-      <img src="assets/qr-live.png" alt="QR code for the How to Help website">
-      <a href="https://talrme.github.io/how-to-help/">https://talrme.github.io/how-to-help/</a>
+      <div class="share-body">
+        <div class="share-copy-card">
+          <label>
+            <span>Website link</span>
+            <input type="url" data-share-url readonly value="https://talrme.github.io/how-to-help/" aria-label="How to Help website link">
+          </label>
+          <button type="button" data-copy-share>Copy</button>
+          <p data-copy-status aria-live="polite"></p>
+        </div>
+        <section class="share-qr-card">
+          <img src="assets/qr-live.png" alt="QR code for the How to Help website">
+          <div>
+            <span>Scan QR</span>
+            <p>Open the site on another phone without typing the link.</p>
+          </div>
+        </section>
+        <section class="share-phone-card">
+          <span class="share-app-icon" aria-hidden="true">
+            <img src="help-icon.png" alt="">
+          </span>
+          <div>
+            <span>Save as app</span>
+            <button type="button" data-open-install-from-share>How</button>
+          </div>
+          <p>Add it to a home screen so it opens like a tiny app.</p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="install-modal" data-install-modal hidden role="dialog" aria-modal="true" aria-labelledby="install-title">
+    <div class="install-panel">
+      <header class="install-header">
+        <div>
+          <p class="eyebrow">Save</p>
+          <h2 id="install-title">Save to Your Phone</h2>
+          <p>Add How to Help to your home screen so it opens like an app.</p>
+        </div>
+        <button type="button" class="plain-x install-close" data-close-install aria-label="Close save instructions">×</button>
+      </header>
+      <div class="install-body">
+        <div class="share-install-grid">
+          <section>
+            <span class="install-method-icon" aria-hidden="true">
+              <img src="help-icon.png" alt="">
+            </span>
+            <div>
+              <span>iPhone / iPad</span>
+              <p>Open this site in Safari, tap Share, then choose Add to Home Screen.</p>
+            </div>
+          </section>
+          <section>
+            <span class="install-method-icon" aria-hidden="true">
+              <img src="help-icon.png" alt="">
+            </span>
+            <div>
+              <span>Android</span>
+              <p>Open this site in Chrome, tap the menu, then choose Add to Home screen or Install app.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="photo-lightbox" data-photo-lightbox hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div class="photo-frame" role="document" tabindex="-1">
+      <button type="button" class="photo-close" data-close-photo aria-label="Close photo">×</button>
+      <button type="button" class="photo-nav photo-prev" data-photo-prev aria-label="Previous photo">‹</button>
+      <figure>
+        <img data-photo-full alt="">
+        <figcaption data-photo-caption></figcaption>
+      </figure>
+      <button type="button" class="photo-nav photo-next" data-photo-next aria-label="Next photo">›</button>
     </div>
   </section>
 
