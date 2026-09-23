@@ -227,7 +227,7 @@
         const items = orderedItems(section);
         const isProjects = section.id === "projects";
         const projectsVisible = !isProjects || Boolean(settings.showProjects);
-        const previewProjectCount = 3;
+        const previewProjectCount = 2;
         const visibleItems = isProjects && !projectsVisible ? items.slice(0, previewProjectCount) : items;
         const hasProjectPreview = isProjects && !projectsVisible && items.length > 0;
         const itemHtml = visibleItems
