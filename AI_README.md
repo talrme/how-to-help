@@ -6,12 +6,10 @@ This is a static GitHub Pages website for sharing practical ways people can help
 
 ## Architecture
 
-- Root `index.html` is the production page based on the simplified Option 2 direction.
-- `staging_1` through `staging_5` are five independent visual directions.
+- Root `index.html` is the production page.
 - Shared functionality lives in `shared/app.js`.
 - Shared baseline styling lives in `shared/base.css`.
 - Production styling lives in root `styles.css`.
-- Each staging folder has its own `styles.css` with the visual treatment.
 - `shared/config.js` contains the Google Doc ID, permanent published URL, published text URL, live site URL, and fallback content snapshot.
 
 ## Content Rules

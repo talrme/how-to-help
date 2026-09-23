@@ -6,10 +6,9 @@ A small family help-board for the newborn period after Avi's arrival. The root p
 
 ## Site Structure
 
-- `index.html` - production page, based on Option 2
+- `index.html` - production page
 - `styles.css` - production page styling
 - `shared/app.js` - shared parser, live Google Doc fetch, expansion, local settings, and local reordering
-- `staging_1/` through `staging_5/` - earlier visual directions kept for reference
 
 ## Google Doc Source
 
