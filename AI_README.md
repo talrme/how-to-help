@@ -48,6 +48,7 @@ Put `End` or `Website End` on its own line in the Google Doc to stop website par
 - The bottom sharing control should follow the World Cup-style share pattern: link field, Copy button/status, QR card, and a save-to-phone details modal.
 - Use root `help-icon.png` for the favicon, Apple touch icon, manifest icon, and save-to-phone/share modal app icons.
 - Description-less list items should render as simple non-expandable rows.
+- The `Projects` section should default to a short preview: show the first 3 items, fade a few more with a `Show all projects` overlay, and show a tiny `Hide projects` link at the bottom when expanded. Settings includes a device-local `Show projects by default` toggle.
 - The old reorder handle UI was intentionally removed; do not show grabber lines on tasks unless Tal asks for reordering again.
 - Photo thumbnails and the hero photo open a lightbox with next/previous navigation.
 

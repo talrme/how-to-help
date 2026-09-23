@@ -6,6 +6,7 @@
   const defaultSettings = {
     style: "cozy",
     openDescriptions: false,
+    showProjects: false,
     compact: false,
     docTextUrl: "",
     order: {}
@@ -224,12 +225,17 @@
     host.innerHTML = sections
       .map((section, index) => {
         const items = orderedItems(section);
-        const itemHtml = items
-          .map((item) => {
+        const isProjects = section.id === "projects";
+        const projectsVisible = !isProjects || Boolean(settings.showProjects);
+        const visibleItems = isProjects && !projectsVisible ? items.slice(0, 6) : items;
+        const hasProjectPreview = isProjects && !projectsVisible && items.length > 3;
+        const itemHtml = visibleItems
+          .map((item, itemIndex) => {
             const hasDescription = Boolean(item.description);
-            const open = settings.openDescriptions && hasDescription;
+            const isPreview = hasProjectPreview && itemIndex >= 3;
+            const open = settings.openDescriptions && hasDescription && !isPreview;
             const main = hasDescription
-              ? `<button type="button" class="card-main" data-toggle-card aria-expanded="${open ? "true" : "false"}">
+              ? `<button type="button" class="card-main" ${isPreview ? "tabindex=\"-1\"" : "data-toggle-card"} aria-expanded="${open ? "true" : "false"}">
                   <span class="item-title">${escapeHtml(item.title)}</span>
                   <span class="expand-mark" aria-hidden="true">⌄</span>
                 </button>`
@@ -241,19 +247,28 @@
                   <p>${escapeHtml(item.description)}</p>
                 </div>`
               : "";
-            return `<article class="help-card ${hasDescription ? "has-description" : "is-static"}" data-section-id="${section.id}" data-item-id="${item.id}">
+            return `<article class="help-card ${hasDescription ? "has-description" : "is-static"} ${isPreview ? "is-project-preview" : ""}" data-section-id="${section.id}" data-item-id="${item.id}">
               ${main}
               ${details}
             </article>`;
           })
           .join("");
-        const sectionPhotos = index > 0 ? photoBreak(index - 1) : "";
+        const sectionPhotos = index > 0 && projectsVisible ? photoBreak(index - 1) : "";
+        const projectOverlay = hasProjectPreview
+          ? `<div class="projects-preview-fade">
+              <button type="button" class="projects-toggle projects-overlay-button" data-toggle-projects aria-expanded="false">Show all projects</button>
+            </div>`
+          : "";
+        const projectFooter = isProjects && projectsVisible
+          ? `<button type="button" class="projects-hide-link" data-toggle-projects aria-expanded="true">Hide projects</button>`
+          : "";
         const sectionHtml = `<section class="help-section" id="${section.id}" style="--section-index:${index}">
           <header>
             <h3>${escapeHtml(section.title)}</h3>
           </header>
           ${sectionPhotos}
-          <div class="help-list">${itemHtml}</div>
+          <div class="help-list ${hasProjectPreview ? "has-project-preview" : ""}">${itemHtml}${projectOverlay}</div>
+          ${projectFooter}
         </section>`;
         return sectionHtml;
       })
@@ -427,6 +442,14 @@
         return;
       }
 
+      if (event.target.closest("[data-toggle-projects]")) {
+        settings.showProjects = !settings.showProjects;
+        saveSettings();
+        applySettingsToPage();
+        renderSections(parsedSections);
+        return;
+      }
+
       if (event.target.closest("[data-open-settings]")) openModal("settings");
       if (
         event.target.closest("[data-close-settings]") ||
@@ -485,6 +508,9 @@
       applySettingsToPage();
       if (input.dataset.setting === "openDescriptions") {
         setDescriptionCards(input.checked);
+      }
+      if (input.dataset.setting === "showProjects") {
+        renderSections(parsedSections);
       }
     });
 
