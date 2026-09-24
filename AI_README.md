@@ -38,6 +38,7 @@ Put `End` or `Website End` on its own line in the Google Doc to stop website par
 - Photo rows should sit under the section title for the following section, starting with the second section, rather than dangling at the bottom of the previous section.
 - The `Miri Help` section photo row should use photos that include Miri.
 - The hero uses a three-photo strip, not one large hero image. Current hero images are `hospital-family-bed.jpg`, `miri-and-avi-with-grandma.jpg`, and `miri-and-avi.jpg`.
+- Active images in `images/` are intentionally tiny optimized JPEGs for phone performance; full-resolution originals live locally in `images/originals/`, which is ignored and not published.
 - Settings should be local to the device.
 - Keep a subtle link to the editable Google Doc in the Advanced settings area.
 - Settings themes are Cozy, Bloom, and Night. Do not bring back the vague Bright option.

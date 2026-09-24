@@ -39,4 +39,5 @@ Open `index.html` to preview the production page. If live Google Doc fetching is
 
 - Item order and display settings are stored in browser `localStorage`.
 - The QR code points to the live GitHub Pages URL.
-- Placeholder images live in `assets/` and can be replaced later without code changes if filenames stay the same.
+- Active website photos in `images/` are aggressively optimized small JPEGs for fast phone loading.
+- Full-resolution photo originals are preserved locally in `images/originals/` in case future edits need them; that folder is intentionally ignored so those originals are not published.
